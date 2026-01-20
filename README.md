@@ -30,7 +30,7 @@ This plugin is perfect for:
 
 ## 🎬 Demo
 
-https://github.com/user-attachments/assets/your-video-id
+📹 **[Watch Demo Video](demo/people_blurred.mp4)** - See the face blur in action!
 
 > *The plugin processes video in real-time, detecting and blurring all faces automatically.*
 
