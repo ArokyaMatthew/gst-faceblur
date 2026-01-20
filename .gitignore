@@ -1,0 +1,50 @@
+# Build directories
+build/
+builddir/
+_build/
+*.p/
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*~
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# ONNX Models (downloaded during usage)
+*.onnx
+
+# Meson
+meson-logs/
+meson-private/
+.mesonpy.json
+
+# Python
+__pycache__/
+*.py[cod]

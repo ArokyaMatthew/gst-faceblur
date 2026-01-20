@@ -1,0 +1,2 @@
+option('onnxruntime_path', type : 'string', value : '', description : 'Root path to ONNX Runtime installation (contains include/ and lib/ or bin/)')
+option('doc', type : 'feature', value : 'auto', yield : true, description : 'Build API documentation with gtk-doc')
