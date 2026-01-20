@@ -248,13 +248,89 @@ faceblur model-location=model.onnx confidence-threshold=0.5
 
 ---
 
-## ⚙️ Plugin Properties
+## ⚙️ Plugin Properties & Customization
+
+The faceblur plugin has **three configurable properties** that you can adjust to fine-tune the blur effect:
+
+### Properties Reference
 
 | Property | Type | Default | Range | Description |
 |----------|------|---------|-------|-------------|
-| `model-location` | string | *(required)* | — | Absolute path to the ONNX face detection model file |
-| `mosaic-size` | integer | 12 | 4 – 64 | Size of pixelation blocks in pixels. Larger = stronger blur |
-| `confidence-threshold` | float | 0.7 | 0.0 – 1.0 | Minimum confidence score to consider a detection valid |
+| `model-location` | string | *(required)* | — | Path to the ONNX face detection model file |
+| `mosaic-size` | integer | **12** | 4 – 64 | Size of pixelation blocks (larger = stronger blur) |
+| `confidence-threshold` | float | **0.7** | 0.0 – 1.0 | Detection sensitivity (lower = detects more faces) |
+
+---
+
+### 🎨 Customizing the Blur Effect
+
+#### Mosaic Size (Pixelation Strength)
+
+The `mosaic-size` property controls how "blocky" the pixelation appears:
+
+| Value | Effect | Best For |
+|-------|--------|----------|
+| `4-8` | Subtle blur, face shape still visible | Light anonymization |
+| `12` (default) | Balanced - good privacy protection | General use |
+| `16-24` | Strong blur, face unrecognizable | High privacy needs |
+| `32-64` | Very heavy pixelation | Maximum anonymization |
+
+**Examples:**
+```bash
+# Light blur - preserves some detail
+gst-launch-1.0 ... ! faceblur model-location=model.onnx mosaic-size=6 ! ...
+
+# Strong blur - complete anonymization
+gst-launch-1.0 ... ! faceblur model-location=model.onnx mosaic-size=24 ! ...
+
+# Maximum blur - very blocky
+gst-launch-1.0 ... ! faceblur model-location=model.onnx mosaic-size=48 ! ...
+```
+
+---
+
+#### Confidence Threshold (Detection Sensitivity)
+
+The `confidence-threshold` property controls how certain the AI must be before blurring a face:
+
+| Value | Behavior | Use Case |
+|-------|----------|----------|
+| `0.3-0.5` | Detects more faces (may include false positives) | Don't miss any face |
+| `0.7` (default) | Balanced detection accuracy | General use |
+| `0.8-0.9` | Only very confident detections | Reduce false positives |
+
+**Examples:**
+```bash
+# Catch all possible faces (more aggressive)
+gst-launch-1.0 ... ! faceblur model-location=model.onnx confidence-threshold=0.5 ! ...
+
+# Only blur faces AI is very sure about
+gst-launch-1.0 ... ! faceblur model-location=model.onnx confidence-threshold=0.85 ! ...
+```
+
+---
+
+#### Combining Parameters
+
+You can combine both parameters for fine-tuned control:
+
+```bash
+# Strong blur + aggressive detection (maximum privacy)
+gst-launch-1.0 filesrc location=video.mp4 ! decodebin ! videoconvert ! \
+    video/x-raw,format=RGBA ! \
+    faceblur model-location=version-RFB-320.onnx \
+             mosaic-size=24 \
+             confidence-threshold=0.5 ! \
+    videoconvert ! x264enc ! mp4mux ! filesink location=output.mp4
+
+# Light blur + precise detection (subtle effect)
+gst-launch-1.0 filesrc location=video.mp4 ! decodebin ! videoconvert ! \
+    video/x-raw,format=RGBA ! \
+    faceblur model-location=version-RFB-320.onnx \
+             mosaic-size=8 \
+             confidence-threshold=0.8 ! \
+    videoconvert ! x264enc ! mp4mux ! filesink location=output.mp4
+```
 
 ---
 
